@@ -25,22 +25,22 @@ export class ProjectResolver implements IProjectResolver {
 
   @Mutation(() => CreateProjectResponse)
   async createProject(
-    @Args('createProjectInput') createProjectInput: CreateProjectInput,
+    @Args('createProjectInput') input: CreateProjectInput,
   ): Promise<CreateProjectResponse> {
-    return await this.projectsService.createProject(createProjectInput);
+    return await this.projectsService.createProject(input);
   }
 
   @Mutation(() => UpdateProjectResponse)
   async updateProject(
-    @Args('updateProjectInput') updateProjectInput: UpdateProjectInput,
+    @Args('updateProjectInput') input: UpdateProjectInput,
   ): Promise<UpdateProjectResponse> {
-    return await this.projectsService.updateProject(updateProjectInput);
+    return await this.projectsService.updateProject(input);
   }
 
   @Mutation(() => RemoveProjectResponse)
   async removeProject(
-    @Args('removeProjectInput') removeProjectInput: RemoveProjectInput,
+    @Args('removeProjectInput') input: RemoveProjectInput,
   ): Promise<RemoveProjectResponse> {
-    return await this.projectsService.removeProject(removeProjectInput);
+    return await this.projectsService.removeProject(input);
   }
 }

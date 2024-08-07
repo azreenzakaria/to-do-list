@@ -9,6 +9,7 @@ import {
   RemoveProjectInput,
   UpdateProjectInput,
 } from './graphql/projects.input';
+import { SYSTEM } from 'src/constants';
 
 @Injectable()
 export class ProjectsService {
@@ -38,7 +39,7 @@ export class ProjectsService {
     try {
       const newProject = new ProjectEntity();
       newProject.title = createProjectInput.title;
-      newProject.createdBy = 'Azreen';
+      newProject.createdBy = SYSTEM;
       await this.projectRepo.save(newProject);
       return { message: 'A project have been created successfully.' };
     } catch (error) {
@@ -75,7 +76,7 @@ export class ProjectsService {
       if (!currentData)
         throw new Error('Data is not available. Please contact support');
       // Updating the record
-      currentData.deletedBy = 'SYSTEM';
+      currentData.deletedBy = SYSTEM;
       currentData.deletedDateTime = new Date().toISOString();
       await this.projectRepo.save(currentData);
       return { message: 'A project have been removed successfully.' };
