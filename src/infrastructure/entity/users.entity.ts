@@ -6,15 +6,15 @@ import { IUser } from './interface/user.interface';
 @Entity({ name: 'users' })
 @ObjectType()
 export class UserEntity extends BaseEntity implements IUser {
-  @Field(() => String, { name: 'username' })
+  @Field(() => String)
   @Column({ type: 'varchar', length: 128 })
   username: string;
 
-  @Field(() => String, { name: 'email' })
+  @Field(() => String)
   @Column({ type: 'varchar', length: 128 })
   email: string;
 
-  @Field(() => String, { name: 'refresh_token' })
-  @Column({ type: 'text', nullable: true })
+  @Field(() => String, { nullable: true })
+  @Column({ name: 'refresh_token', type: 'text', nullable: true })
   refreshToken?: string;
 }

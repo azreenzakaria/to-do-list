@@ -19,7 +19,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "typeorm-ts-node-commonjs",
-    "migration:generate": "typeorm migration:generate ./migrations/addUserTable -d ./dist/typeorm.config.js",
+    "migration:generate": "typeorm migration:generate ./migrations/addDatabase -d ./dist/typeorm.config.js",
     "migration:run": "typeorm migration:run -d  ./dist/typeorm.config.js"
   },
   "dependencies": {
@@ -31,6 +31,8 @@
     "@nestjs/graphql": "^12.2.0",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/typeorm": "^10.0.2",
+    "class-validator": "^0.14.1",
+    "crypto-js": "^4.2.0",
     "dotenv": "^16.4.5",
     "graphql": "^16.9.0",
     "mysql2": "^3.10.2",

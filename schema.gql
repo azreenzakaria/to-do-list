@@ -1,0 +1,79 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type GetUserResponse {
+  message: String!
+}
+
+type LogInResponse {
+  id: String!
+  email: String!
+  accessToken: String!
+  refreshToken: String!
+}
+
+type SignInResponse {
+  message: String!
+}
+
+type IProjectList {
+  id: String!
+  title: String!
+}
+
+type GetProjectsResponse {
+  result: [IProjectList!]!
+}
+
+type CreateProjectResponse {
+  message: String!
+}
+
+type UpdateProjectResponse {
+  message: String!
+}
+
+type RemoveProjectResponse {
+  message: String!
+}
+
+type Query {
+  getUser(getUserInput: GetUserInput!): GetUserResponse!
+  getProject: GetProjectsResponse!
+}
+
+input GetUserInput {
+  email: String!
+}
+
+type Mutation {
+  logIn(logInInput: LogInInput!): LogInResponse!
+  signIn(signInInput: SignInInput!): SignInResponse!
+  createProject(createProjectInput: CreateProjectInput!): CreateProjectResponse!
+  updateProject(updateProjectInput: UpdateProjectInput!): UpdateProjectResponse!
+  removeProject(removeProjectInput: RemoveProjectInput!): RemoveProjectResponse!
+}
+
+input LogInInput {
+  email: String!
+  password: String!
+}
+
+input SignInInput {
+  email: String!
+  password: String!
+}
+
+input CreateProjectInput {
+  title: String!
+}
+
+input UpdateProjectInput {
+  id: String!
+  title: String!
+}
+
+input RemoveProjectInput {
+  id: String!
+}

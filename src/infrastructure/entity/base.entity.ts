@@ -15,33 +15,27 @@ export class BaseEntity implements IBase {
   @PrimaryGeneratedColumn('uuid')
   id?: string;
 
-  @Column({ type: 'varchar', length: 50 })
-  @Field(() => String, { name: 'created_by' })
+  @Field(() => String)
+  @Column({ name: 'created_by', type: 'varchar', length: 50 })
   createdBy: string;
 
-  @CreateDateColumn()
-  @Field(() => GraphQLISODateTime, { name: 'created_date_time' })
+  @Field(() => GraphQLISODateTime)
+  @CreateDateColumn({ name: 'created_date_time' })
   createdDateTime: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
   @Field(() => String, { nullable: true })
-  modified_by?: string;
+  @Column({ name: 'modified_by', type: 'varchar', length: 50, nullable: true })
+  modifiedBy?: string;
 
-  @UpdateDateColumn()
-  @Field(() => GraphQLISODateTime, {
-    name: 'updated_date_time',
-    nullable: true,
-  })
+  @Field(() => GraphQLISODateTime, { nullable: true })
+  @UpdateDateColumn({ name: 'updated_date_time', nullable: true })
   updatedDateTime?: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  @Field(() => String, { name: 'deleted_by', nullable: true })
+  @Field(() => String, { nullable: true })
+  @Column({ name: 'deleted_by', type: 'varchar', length: 50, nullable: true })
   deletedBy?: string;
 
-  @DeleteDateColumn()
-  @Field(() => GraphQLISODateTime, {
-    name: 'deleted_date_time',
-    nullable: true,
-  })
+  @Field(() => GraphQLISODateTime, { nullable: true })
+  @DeleteDateColumn({ name: 'deleted_date_time' })
   deletedDateTime?: string;
 }
