@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from '../entity/users.entity';
+import { ProjectEntity } from '../entity/projects.entity';
+import { TodoEntity } from '../entity/todo.entity';
 
 @Module({
   imports: [
@@ -13,7 +15,7 @@ import { UserEntity } from '../entity/users.entity';
         database: config.getOrThrow('DATABASE_NAME'),
         username: config.getOrThrow('DATABASE_USERNAME'),
         password: config.getOrThrow('DATABASE_PASSWORD'),
-        entities: [UserEntity],
+        entities: [UserEntity, ProjectEntity, TodoEntity],
         autoLoadEntities: false,
         synchronize: false,
       }),
