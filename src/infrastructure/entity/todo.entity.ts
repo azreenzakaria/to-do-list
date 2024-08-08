@@ -1,7 +1,8 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from './base.entity';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
 import { ITodo } from './interface/todo.interface';
+import { ProjectEntity } from './projects.entity';
 
 @Entity({ name: 'todo' })
 @ObjectType()
@@ -14,19 +15,23 @@ export class TodoEntity extends BaseEntity implements ITodo {
   @Column({ type: 'varchar', length: 128, nullable: true })
   description?: string;
 
-  @Field(() => Number)
+  @Field(() => String)
   @Column({ type: 'varchar', length: 128 })
-  priority: number;
+  priority: string;
 
   @Field(() => Boolean)
-  @Column({ name: 'is_done', type: 'varchar', length: 128 })
+  @Column({ name: 'is_done', type: 'boolean' })
   isDone: boolean;
 
-  @Field(() => String, { nullable: true })
-  @Column({ name: 'due_date', type: 'varchar', length: 128, nullable: true })
+  @Field(() => GraphQLISODateTime, { nullable: true })
+  @Column({ name: 'due_date', nullable: true })
   dueDate?: string;
 
   @Field(() => String, { nullable: true })
   @Column({ type: 'varchar', length: 128, nullable: true })
   remarks?: string;
+
+  @ManyToOne(() => ProjectEntity, (project) => project.todos)
+  @JoinColumn({ name: 'project_id' })
+  project?: ProjectEntity;
 }
