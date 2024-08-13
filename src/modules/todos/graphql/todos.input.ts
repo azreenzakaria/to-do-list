@@ -13,11 +13,11 @@ export class GetTodoInput {
 export class CreateTodoInput {
   @IsString()
   @Field()
-  id: string;
+  id?: string;
 
   @IsString()
   @Field()
-  projectId: string;
+  projectId?: string;
 
   @IsString()
   @IsNotEmpty()
