@@ -2,9 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TodoEntity } from 'src/infrastructure/entity/todo.entity';
 import { Repository } from 'typeorm';
-import { CreateTodoResponse, GetTodosResponse } from './graphql/todos.response';
+import { CrudTodoResponse, GetTodosResponse } from './graphql/todos.response';
 import { ITodoList } from './dto/todos.dto';
-import { CreateTodoInput, RemoveTodoInput } from './graphql/todos.input';
+import {
+  CreateTodoInput,
+  GetTodoInput,
+  RemoveTodoInput,
+} from './graphql/todos.input';
 import { ProjectEntity } from 'src/infrastructure/entity/projects.entity';
 import { SYSTEM } from 'src/constants';
 
@@ -17,12 +21,21 @@ export class TodosService {
     private readonly projectRepo: Repository<TodoEntity>,
   ) {}
 
-  async getTodos(): Promise<GetTodosResponse> {
+  async getTodos(input: GetTodoInput): Promise<GetTodosResponse> {
     try {
+      // Validation the id of the project
+      const projectData = await this.projectRepo.findOneBy({
+        id: input.projectId,
+      });
+      if (!projectData)
+        throw new Error('No project available. Please contact support!');
+
       const todoData = await this.todoRepo.find({
+        where: { project: { id: projectData.id } },
         order: { updatedDateTime: 'DESC' },
       });
       if (todoData.length === 0) throw new Error('No Todo Found!');
+
       const todoArray: ITodoList[] = todoData.map(
         ({ id, title, description, priority, isDone, dueDate, remarks }) => ({
           id,
@@ -41,13 +54,20 @@ export class TodosService {
     }
   }
 
-  async createTodo(input: CreateTodoInput): Promise<CreateTodoResponse> {
+  async createTodo(input: CreateTodoInput): Promise<CrudTodoResponse> {
     try {
-      const { id, title, description, priority, isDone, dueDate, remarks } =
-        input;
+      const {
+        projectId,
+        title,
+        description,
+        priority,
+        isDone,
+        dueDate,
+        remarks,
+      } = input;
 
       // Validation the id of the project
-      const projectData = await this.projectRepo.findOneBy({ id });
+      const projectData = await this.projectRepo.findOneBy({ id: projectId });
       if (!projectData)
         throw new Error('No project available. Please contact support!');
 
@@ -55,11 +75,11 @@ export class TodosService {
       const newTodo = new TodoEntity();
       newTodo.createdBy = SYSTEM;
       newTodo.title = title;
-      newTodo.description = description;
+      newTodo.description = description || '-';
       newTodo.priority = priority;
       newTodo.isDone = isDone;
-      newTodo.dueDate = dueDate;
-      newTodo.remarks = remarks;
+      newTodo.dueDate = dueDate || '-';
+      newTodo.remarks = remarks || '-';
       newTodo.project = projectData;
       await this.todoRepo.save(newTodo);
 
@@ -70,7 +90,7 @@ export class TodosService {
     }
   }
 
-  async updateTodo(input: CreateTodoInput): Promise<CreateTodoResponse> {
+  async updateTodo(input: CreateTodoInput): Promise<CrudTodoResponse> {
     try {
       const { id, title, description, priority, isDone, dueDate, remarks } =
         input;
@@ -82,11 +102,11 @@ export class TodosService {
 
       // Update the record
       todoData.title = title;
-      todoData.description = description;
+      todoData.description = description || '-';
       todoData.priority = priority;
       todoData.isDone = isDone;
-      todoData.dueDate = dueDate;
-      todoData.remarks = remarks;
+      todoData.dueDate = dueDate || '-';
+      todoData.remarks = remarks || '-';
       await this.todoRepo.save(todoData);
 
       return { message: 'A Todo have been updated successfully.' };
@@ -96,7 +116,7 @@ export class TodosService {
     }
   }
 
-  async removeTodo(input: RemoveTodoInput): Promise<CreateTodoResponse> {
+  async removeTodo(input: RemoveTodoInput): Promise<CrudTodoResponse> {
     try {
       // Validate the id of todo
       const todoData = await this.todoRepo.findOneBy({

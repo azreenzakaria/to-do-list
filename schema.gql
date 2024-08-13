@@ -52,18 +52,22 @@ type GetTodosResponse {
   result: [ITodoList!]!
 }
 
-type CreateTodoResponse {
+type CrudTodoResponse {
   message: String!
 }
 
 type Query {
   getUser(getUserInput: GetUserInput!): GetUserResponse!
   getProject: GetProjectsResponse!
-  getTodos: GetTodosResponse!
+  getTodos(getTodoInput: GetTodoInput!): GetTodosResponse!
 }
 
 input GetUserInput {
   email: String!
+}
+
+input GetTodoInput {
+  projectId: String!
 }
 
 type Mutation {
@@ -72,9 +76,9 @@ type Mutation {
   createProject(createProjectInput: CreateProjectInput!): CreateProjectResponse!
   updateProject(updateProjectInput: UpdateProjectInput!): UpdateProjectResponse!
   removeProject(removeProjectInput: RemoveProjectInput!): RemoveProjectResponse!
-  createTodo(createTodoInput: CreateTodoInput!): CreateTodoResponse!
-  updateTodo(createTodoInput: CreateTodoInput!): CreateTodoResponse!
-  removeTodo(removeTodoInput: RemoveTodoInput!): CreateTodoResponse!
+  createTodo(createTodoInput: CreateTodoInput!): CrudTodoResponse!
+  updateTodo(createTodoInput: CreateTodoInput!): CrudTodoResponse!
+  removeTodo(removeTodoInput: RemoveTodoInput!): CrudTodoResponse!
 }
 
 input LogInInput {
@@ -102,6 +106,7 @@ input RemoveProjectInput {
 
 input CreateTodoInput {
   id: String!
+  projectId: String!
   title: String!
   description: String!
   priority: String!

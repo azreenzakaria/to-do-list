@@ -8,7 +8,7 @@ export class GetTodosResponse {
 }
 
 @ObjectType()
-export class CreateTodoResponse {
+export class CrudTodoResponse {
   @Field()
   message: string;
 }

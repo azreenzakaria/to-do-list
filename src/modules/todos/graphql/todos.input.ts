@@ -2,11 +2,22 @@ import { InputType, Field } from '@nestjs/graphql';
 import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
 
 @InputType()
-export class CreateTodoInput {
+export class GetTodoInput {
   @IsString()
   @IsNotEmpty()
   @Field()
+  projectId: string;
+}
+
+@InputType()
+export class CreateTodoInput {
+  @IsString()
+  @Field()
   id: string;
+
+  @IsString()
+  @Field()
+  projectId: string;
 
   @IsString()
   @IsNotEmpty()
