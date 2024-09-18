@@ -1,5 +1,6 @@
 
 # Todo List (Backend)
+![image_alt](https://github.com/azreenzakaria/to-do-list/blob/35dd49bcf7d4750f4b2f85b9b0e184b2aff8c3a7/todolist_api.png)
 ## Introduction
 A simple todolist applcation written in Typescript and use NestJs, GraphQL and MySQL.
 
