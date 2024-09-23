@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TodoEntity } from 'src/infrastructure/entity/todo.entity';
-import { TodoResolver } from './todos.resolver';
-import { TodosService } from './todos.service';
-import { ProjectEntity } from 'src/infrastructure/entity/projects.entity';
+import { ItemEntity } from 'src/infrastructure/entity/todo.entity';
+import { ItemResolver } from './todos.resolver';
+import { ItemService } from './todos.service';
+import { TaskEntity } from 'src/infrastructure/entity/projects.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TodoEntity, ProjectEntity])],
-  providers: [TodoResolver, TodosService],
+  imports: [TypeOrmModule.forFeature([ItemEntity, TaskEntity])],
+  providers: [ItemResolver, ItemService],
 })
-export class TodosModule {}
+export class ItemModule {}

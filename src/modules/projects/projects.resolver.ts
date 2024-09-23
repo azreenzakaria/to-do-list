@@ -1,46 +1,41 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { ProjectEntity } from 'src/infrastructure/entity/projects.entity';
+import { TaskEntity } from 'src/infrastructure/entity/projects.entity';
+import { CrudTaskResponse, GetTaskResponse } from './graphql/projects.response';
+import { TaskService } from './projects.service';
+import { ITaskResolver } from './interface/projects.interface';
 import {
-  CreateProjectResponse,
-  GetProjectsResponse,
-  RemoveProjectResponse,
-  UpdateProjectResponse,
-} from './graphql/projects.response';
-import { ProjectsService } from './projects.service';
-import { IProjectResolver } from './interface/projects.interface';
-import {
-  CreateProjectInput,
-  RemoveProjectInput,
-  UpdateProjectInput,
+  CreateTaskInput,
+  RemoveTaskInput,
+  UpdateTaskInput,
 } from './graphql/projects.input';
 
-@Resolver(() => ProjectEntity)
-export class ProjectResolver implements IProjectResolver {
-  constructor(private readonly projectsService: ProjectsService) {}
+@Resolver(() => TaskEntity)
+export class TaskResolver implements ITaskResolver {
+  constructor(private readonly taskService: TaskService) {}
 
-  @Query(() => GetProjectsResponse)
-  async getProject(): Promise<GetProjectsResponse> {
-    return await this.projectsService.getProject();
+  @Query(() => GetTaskResponse)
+  async getTask(): Promise<GetTaskResponse> {
+    return await this.taskService.getTask();
   }
 
-  @Mutation(() => CreateProjectResponse)
-  async createProject(
-    @Args('createProjectInput') input: CreateProjectInput,
-  ): Promise<CreateProjectResponse> {
-    return await this.projectsService.createProject(input);
+  @Mutation(() => CrudTaskResponse)
+  async createTask(
+    @Args('createTaskInput') input: CreateTaskInput,
+  ): Promise<CrudTaskResponse> {
+    return await this.taskService.createTask(input);
   }
 
-  @Mutation(() => UpdateProjectResponse)
-  async updateProject(
-    @Args('updateProjectInput') input: UpdateProjectInput,
-  ): Promise<UpdateProjectResponse> {
-    return await this.projectsService.updateProject(input);
+  @Mutation(() => CrudTaskResponse)
+  async updateTask(
+    @Args('updateTaskInput') input: UpdateTaskInput,
+  ): Promise<CrudTaskResponse> {
+    return await this.taskService.updateTask(input);
   }
 
-  @Mutation(() => RemoveProjectResponse)
-  async removeProject(
-    @Args('removeProjectInput') input: RemoveProjectInput,
-  ): Promise<RemoveProjectResponse> {
-    return await this.projectsService.removeProject(input);
+  @Mutation(() => CrudTaskResponse)
+  async removeTask(
+    @Args('removeTaskInput') input: RemoveTaskInput,
+  ): Promise<CrudTaskResponse> {
+    return await this.taskService.removeTask(input);
   }
 }

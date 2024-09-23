@@ -1,87 +1,71 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TodoEntity } from 'src/infrastructure/entity/todo.entity';
+import { ItemEntity } from 'src/infrastructure/entity/todo.entity';
 import { Repository } from 'typeorm';
-import { CrudTodoResponse, GetTodosResponse } from './graphql/todos.response';
-import { ITodoList } from './dto/todos.dto';
+import { CrudItemResponse, GetItemResponse } from './graphql/todos.response';
+import { IItemList } from './dto/todos.dto';
 import {
-  CreateTodoInput,
-  GetTodoInput,
-  RemoveTodoInput,
+  CreateItemInput,
+  GetItemInput,
+  RemoveItemInput,
 } from './graphql/todos.input';
-import { ProjectEntity } from 'src/infrastructure/entity/projects.entity';
+import { TaskEntity } from 'src/infrastructure/entity/projects.entity';
 import { SYSTEM } from 'src/constants';
 
 @Injectable()
-export class TodosService {
+export class ItemService {
   constructor(
-    @InjectRepository(TodoEntity)
-    private readonly todoRepo: Repository<TodoEntity>,
-    @InjectRepository(ProjectEntity)
-    private readonly projectRepo: Repository<TodoEntity>,
+    @InjectRepository(ItemEntity)
+    private readonly itemRepo: Repository<ItemEntity>,
+    @InjectRepository(TaskEntity)
+    private readonly taskRepo: Repository<TaskEntity>,
   ) {}
 
-  async getTodos(input: GetTodoInput): Promise<GetTodosResponse> {
+  async getItems(input: GetItemInput): Promise<GetItemResponse> {
     try {
       // Validation the id of the project
-      const projectData = await this.projectRepo.findOneBy({
-        id: input.projectId,
+      const taskData = await this.taskRepo.findOneBy({
+        id: input.taskId,
       });
-      if (!projectData)
-        throw new Error('No project available. Please contact support!');
+      if (!taskData)
+        throw new Error('No task available. Please contact support!');
 
-      const todoData = await this.todoRepo.find({
-        where: { project: { id: projectData.id } },
+      const itemData = await this.itemRepo.find({
+        where: { task: { id: taskData.id } },
         order: { updatedDateTime: 'DESC' },
       });
-      if (todoData.length === 0) throw new Error('No Todo Found!');
+      if (itemData.length === 0) throw new Error('No item Found!');
 
-      const todoArray: ITodoList[] = todoData.map(
-        ({ id, title, description, priority, isDone, dueDate, remarks }) => ({
+      const itemArr: IItemList[] = itemData.map(
+        ({ id, name, isCompleted }) => ({
           id,
-          title,
-          description,
-          priority,
-          isDone,
-          dueDate,
-          remarks,
+          name,
+          isCompleted,
         }),
       );
-      return { result: todoArray };
+      return { result: itemArr };
     } catch (error) {
       console.log(error);
       throw new Error(error);
     }
   }
 
-  async createTodo(input: CreateTodoInput): Promise<CrudTodoResponse> {
+  async createItem(input: CreateItemInput): Promise<CrudItemResponse> {
     try {
-      const {
-        projectId,
-        title,
-        description,
-        priority,
-        isDone,
-        dueDate,
-        remarks,
-      } = input;
+      const { name, isCompleted, taskId } = input;
 
       // Validation the id of the project
-      const projectData = await this.projectRepo.findOneBy({ id: projectId });
-      if (!projectData)
+      const taskData = await this.taskRepo.findOneBy({ id: taskId });
+      if (!taskData)
         throw new Error('No project available. Please contact support!');
 
       // Then add the record
-      const newTodo = new TodoEntity();
-      newTodo.createdBy = SYSTEM;
-      newTodo.title = title;
-      newTodo.description = description || '-';
-      newTodo.priority = priority;
-      newTodo.isDone = isDone;
-      newTodo.dueDate = dueDate || '-';
-      newTodo.remarks = remarks || '-';
-      newTodo.project = projectData;
-      await this.todoRepo.save(newTodo);
+      const newItem = new ItemEntity();
+      newItem.createdBy = SYSTEM;
+      newItem.name = name;
+      newItem.isCompleted = isCompleted;
+      newItem.task = taskData;
+      await this.itemRepo.save(newItem);
 
       return { message: 'A Todo have been created successfully.' };
     } catch (error) {
@@ -90,45 +74,19 @@ export class TodosService {
     }
   }
 
-  async updateTodo(input: CreateTodoInput): Promise<CrudTodoResponse> {
-    try {
-      const { id, title, description, priority, isDone, dueDate, remarks } =
-        input;
-
-      // Validation the id of the todo
-      const todoData = await this.todoRepo.findOneBy({ id });
-      if (!todoData)
-        throw new Error('Data is not available. Please contact support!');
-
-      // Update the record
-      todoData.title = title;
-      todoData.description = description || '-';
-      todoData.priority = priority;
-      todoData.isDone = isDone;
-      todoData.dueDate = dueDate || '-';
-      todoData.remarks = remarks || '-';
-      await this.todoRepo.save(todoData);
-
-      return { message: 'A Todo have been updated successfully.' };
-    } catch (error) {
-      console.log(error);
-      throw new Error(error);
-    }
-  }
-
-  async removeTodo(input: RemoveTodoInput): Promise<CrudTodoResponse> {
+  async removeItem(input: RemoveItemInput): Promise<CrudItemResponse> {
     try {
       // Validate the id of todo
-      const todoData = await this.todoRepo.findOneBy({
+      const itemData = await this.itemRepo.findOneBy({
         id: input.id,
       });
-      if (!todoData)
+      if (!itemData)
         throw new Error('Data is not available. Please contact support');
 
       // Update the record
-      todoData.deletedBy = SYSTEM;
-      todoData.deletedDateTime = new Date().toISOString();
-      await this.todoRepo.save(todoData);
+      itemData.deletedBy = SYSTEM;
+      itemData.deletedDateTime = new Date().toISOString();
+      await this.itemRepo.save(itemData);
 
       return { message: 'A Todo have been deleted successfully.' };
     } catch (error) {

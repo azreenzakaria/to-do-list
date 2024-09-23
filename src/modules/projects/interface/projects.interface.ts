@@ -1,18 +1,16 @@
 import {
-  CreateProjectInput,
-  RemoveProjectInput,
-  UpdateProjectInput,
+  CreateTaskInput,
+  UpdateTaskInput,
+  RemoveTaskInput,
 } from '../graphql/projects.input';
 import {
-  CreateProjectResponse,
-  GetProjectsResponse,
-  RemoveProjectResponse,
-  UpdateProjectResponse,
+  GetTaskResponse,
+  CrudTaskResponse,
 } from '../graphql/projects.response';
 
-export interface IProjectResolver {
-  getProject(): Promise<GetProjectsResponse>;
-  createProject(input: CreateProjectInput): Promise<CreateProjectResponse>;
-  updateProject(input: UpdateProjectInput): Promise<UpdateProjectResponse>;
-  removeProject(input: RemoveProjectInput): Promise<RemoveProjectResponse>;
+export interface ITaskResolver {
+  getTask(): Promise<GetTaskResponse>;
+  createTask(input: CreateTaskInput): Promise<CrudTaskResponse>;
+  updateTask(input: UpdateTaskInput): Promise<CrudTaskResponse>;
+  removeTask(input: RemoveTaskInput): Promise<CrudTaskResponse>;
 }

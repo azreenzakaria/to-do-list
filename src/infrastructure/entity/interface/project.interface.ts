@@ -1,3 +1,3 @@
-export interface IProject {
-  title: string;
+export interface ITask {
+  name: string;
 }

@@ -1,42 +1,35 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CrudTodoResponse, GetTodosResponse } from './graphql/todos.response';
-import { TodosService } from './todos.service';
-import { TodoEntity } from 'src/infrastructure/entity/todo.entity';
+import { CrudItemResponse, GetItemResponse } from './graphql/todos.response';
+import { ItemService } from './todos.service';
+import { ItemEntity } from 'src/infrastructure/entity/todo.entity';
 import {
-  CreateTodoInput,
-  GetTodoInput,
-  RemoveTodoInput,
+  CreateItemInput,
+  GetItemInput,
+  RemoveItemInput,
 } from './graphql/todos.input';
 
-@Resolver(() => TodoEntity)
-export class TodoResolver {
-  constructor(private readonly todosService: TodosService) {}
+@Resolver(() => ItemEntity)
+export class ItemResolver {
+  constructor(private readonly itemService: ItemService) {}
 
-  @Query(() => GetTodosResponse)
-  async getTodos(
-    @Args('getTodoInput') input: GetTodoInput,
-  ): Promise<GetTodosResponse> {
-    return await this.todosService.getTodos(input);
+  @Query(() => GetItemResponse)
+  async getItems(
+    @Args('getItemInput') input: GetItemInput,
+  ): Promise<GetItemResponse> {
+    return await this.itemService.getItems(input);
   }
 
-  @Mutation(() => CrudTodoResponse)
-  async createTodo(
-    @Args('createTodoInput') input: CreateTodoInput,
-  ): Promise<CrudTodoResponse> {
-    return await this.todosService.createTodo(input);
+  @Mutation(() => CrudItemResponse)
+  async createItem(
+    @Args('createItemInput') input: CreateItemInput,
+  ): Promise<CrudItemResponse> {
+    return await this.itemService.createItem(input);
   }
 
-  @Mutation(() => CrudTodoResponse)
-  async updateTodo(
-    @Args('createTodoInput') input: CreateTodoInput,
-  ): Promise<CrudTodoResponse> {
-    return await this.todosService.updateTodo(input);
-  }
-
-  @Mutation(() => CrudTodoResponse)
-  async removeTodo(
-    @Args('removeTodoInput') input: RemoveTodoInput,
-  ): Promise<CrudTodoResponse> {
-    return await this.todosService.removeTodo(input);
+  @Mutation(() => CrudItemResponse)
+  async removeItem(
+    @Args('removeItemInput') input: RemoveItemInput,
+  ): Promise<CrudItemResponse> {
+    return await this.itemService.removeItem(input);
   }
 }

@@ -1,14 +1,14 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { ITodoList } from '../dto/todos.dto';
+import { IItemList } from '../dto/todos.dto';
 
 @ObjectType()
-export class GetTodosResponse {
-  @Field(() => [ITodoList])
-  result: ITodoList[];
+export class GetItemResponse {
+  @Field(() => [IItemList])
+  result: IItemList[];
 }
 
 @ObjectType()
-export class CrudTodoResponse {
+export class CrudItemResponse {
   @Field()
   message: string;
 }

@@ -1,46 +1,46 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ProjectEntity } from 'src/infrastructure/entity/projects.entity';
+import { TaskEntity } from 'src/infrastructure/entity/projects.entity';
 import { Repository } from 'typeorm';
-import { IProjectList } from './dto/projects.dto';
-import { GetProjectsResponse } from './graphql/projects.response';
+import { ITaskList } from './dto/projects.dto';
+import { GetTaskResponse } from './graphql/projects.response';
 import {
-  CreateProjectInput,
-  RemoveProjectInput,
-  UpdateProjectInput,
+  CreateTaskInput,
+  UpdateTaskInput,
+  RemoveTaskInput,
 } from './graphql/projects.input';
 import { SYSTEM } from 'src/constants';
 
 @Injectable()
-export class ProjectsService {
+export class TaskService {
   constructor(
-    @InjectRepository(ProjectEntity)
-    private readonly projectRepo: Repository<ProjectEntity>,
+    @InjectRepository(TaskEntity)
+    private readonly taskRepo: Repository<TaskEntity>,
   ) {}
 
-  async getProject(): Promise<GetProjectsResponse> {
+  async getTask(): Promise<GetTaskResponse> {
     try {
-      const getTitles: ProjectEntity[] = await this.projectRepo.find({
+      const getNames: TaskEntity[] = await this.taskRepo.find({
         order: { updatedDateTime: 'DESC' },
       });
-      if (getTitles.length === 0) throw new Error('No project found');
-      const projectList: IProjectList[] = getTitles.map(({ id, title }) => ({
+      if (getNames.length === 0) throw new Error('No task found');
+      const todoList: ITaskList[] = getNames.map(({ id, name }) => ({
         id,
-        title,
+        name,
       }));
-      return { result: projectList };
+      return { result: todoList };
     } catch (error) {
       console.log(error);
       throw new Error(error);
     }
   }
 
-  async createProject(createProjectInput: CreateProjectInput) {
+  async createTask(createTaskInput: CreateTaskInput) {
     try {
-      const newProject = new ProjectEntity();
-      newProject.title = createProjectInput.title;
+      const newProject = new TaskEntity();
+      newProject.name = createTaskInput.name;
       newProject.createdBy = SYSTEM;
-      await this.projectRepo.save(newProject);
+      await this.taskRepo.save(newProject);
       return { message: 'A project have been created successfully.' };
     } catch (error) {
       console.log(error);
@@ -48,37 +48,37 @@ export class ProjectsService {
     }
   }
 
-  async updateProject(updateProjectInput: UpdateProjectInput) {
+  async updateTask(updateTaskInput: UpdateTaskInput) {
     try {
-      const { id, title } = updateProjectInput;
+      const { id, name } = updateTaskInput;
 
-      const currentData = await this.projectRepo.findOneBy({
+      const currentData = await this.taskRepo.findOneBy({
         id: id,
       });
 
       if (!currentData)
         throw new Error('Data is not available. Please contact support');
       // Updating the record
-      currentData.title = title;
-      await this.projectRepo.save(currentData);
-      return { message: 'A project have been updated successfully.' };
+      currentData.name = name;
+      await this.taskRepo.save(currentData);
+      return { message: 'A task have been updated successfully.' };
     } catch (error) {
       console.log(error);
       throw new Error(error);
     }
   }
 
-  async removeProject(removeProjectInput: RemoveProjectInput) {
+  async removeTask(removeTaskInput: RemoveTaskInput) {
     try {
-      const currentData = await this.projectRepo.findOneBy({
-        id: removeProjectInput.id,
+      const currentData = await this.taskRepo.findOneBy({
+        id: removeTaskInput.id,
       });
       if (!currentData)
         throw new Error('Data is not available. Please contact support');
       // Updating the record
       currentData.deletedBy = SYSTEM;
       currentData.deletedDateTime = new Date().toISOString();
-      await this.projectRepo.save(currentData);
+      await this.taskRepo.save(currentData);
       return { message: 'A project have been removed successfully.' };
     } catch (error) {
       console.log(error);
