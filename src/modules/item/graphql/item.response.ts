@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { IItemList } from '../dto/todos.dto';
+import { IItemList } from '../dto/item.dto';
 
 @ObjectType()
 export class GetItemResponse {

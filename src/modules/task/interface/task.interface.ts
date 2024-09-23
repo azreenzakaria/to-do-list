@@ -2,11 +2,8 @@ import {
   CreateTaskInput,
   UpdateTaskInput,
   RemoveTaskInput,
-} from '../graphql/projects.input';
-import {
-  GetTaskResponse,
-  CrudTaskResponse,
-} from '../graphql/projects.response';
+} from '../graphql/task.input';
+import { GetTaskResponse, CrudTaskResponse } from '../graphql/task.response';
 
 export interface ITaskResolver {
   getTask(): Promise<GetTaskResponse>;

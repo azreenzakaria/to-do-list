@@ -1,13 +1,13 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { TaskEntity } from 'src/infrastructure/entity/projects.entity';
-import { CrudTaskResponse, GetTaskResponse } from './graphql/projects.response';
-import { TaskService } from './projects.service';
-import { ITaskResolver } from './interface/projects.interface';
+import { TaskEntity } from 'src/infrastructure/entity/task.entity';
+import { CrudTaskResponse, GetTaskResponse } from './graphql/task.response';
+import { TaskService } from './task.service';
+import { ITaskResolver } from './interface/task.interface';
 import {
   CreateTaskInput,
   RemoveTaskInput,
   UpdateTaskInput,
-} from './graphql/projects.input';
+} from './graphql/task.input';
 
 @Resolver(() => TaskEntity)
 export class TaskResolver implements ITaskResolver {

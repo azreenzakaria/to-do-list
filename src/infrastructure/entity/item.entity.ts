@@ -1,8 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
-import { IItem } from './interface/todo.interface';
-import { TaskEntity } from './projects.entity';
+import { IItem } from './interface/item.interface';
+import { TaskEntity } from './task.entity';
 
 @Entity({ name: 'item' })
 @ObjectType()

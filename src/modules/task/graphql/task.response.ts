@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { ITaskList } from '../dto/projects.dto';
+import { ITaskList } from '../dto/task.dto';
 
 @ObjectType()
 export class GetTaskResponse {

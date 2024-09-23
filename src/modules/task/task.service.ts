@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TaskEntity } from 'src/infrastructure/entity/projects.entity';
+import { TaskEntity } from 'src/infrastructure/entity/task.entity';
 import { Repository } from 'typeorm';
-import { ITaskList } from './dto/projects.dto';
-import { GetTaskResponse } from './graphql/projects.response';
+import { ITaskList } from './dto/task.dto';
+import { GetTaskResponse } from './graphql/task.response';
 import {
   CreateTaskInput,
   UpdateTaskInput,
   RemoveTaskInput,
-} from './graphql/projects.input';
+} from './graphql/task.input';
 import { SYSTEM } from 'src/constants';
 
 @Injectable()

@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ItemEntity } from 'src/infrastructure/entity/todo.entity';
+import { ItemEntity } from 'src/infrastructure/entity/item.entity';
 import { Repository } from 'typeorm';
-import { CrudItemResponse, GetItemResponse } from './graphql/todos.response';
-import { IItemList } from './dto/todos.dto';
+import { CrudItemResponse, GetItemResponse } from './graphql/item.response';
+import { IItemList } from './dto/item.dto';
 import {
   CreateItemInput,
   GetItemInput,
   RemoveItemInput,
-} from './graphql/todos.input';
-import { TaskEntity } from 'src/infrastructure/entity/projects.entity';
+} from './graphql/item.input';
+import { TaskEntity } from 'src/infrastructure/entity/task.entity';
 import { SYSTEM } from 'src/constants';
 
 @Injectable()

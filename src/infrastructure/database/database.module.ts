@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from '../entity/users.entity';
-import { TaskEntity } from '../entity/projects.entity';
-import { ItemEntity } from '../entity/todo.entity';
+import { TaskEntity } from '../entity/task.entity';
+import { ItemEntity } from '../entity/item.entity';
 
 @Module({
   imports: [

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TaskEntity } from 'src/infrastructure/entity/projects.entity';
-import { TaskResolver } from './projects.resolver';
-import { TaskService } from './projects.service';
+import { TaskEntity } from 'src/infrastructure/entity/task.entity';
+import { TaskResolver } from './task.resolver';
+import { TaskService } from './task.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([TaskEntity])],

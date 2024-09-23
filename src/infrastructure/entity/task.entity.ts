@@ -1,8 +1,8 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { ITask } from './interface/project.interface';
-import { ItemEntity } from './todo.entity';
+import { ITask } from './interface/task.interface';
+import { ItemEntity } from './item.entity';
 
 @Entity({ name: 'task' })
 @ObjectType()

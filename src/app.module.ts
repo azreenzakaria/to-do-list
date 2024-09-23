@@ -4,8 +4,8 @@ import { DatabaseModule } from './infrastructure/database/database.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { UsersModule } from './modules/users/users.module';
-import { TaskModule } from './modules/projects/projects.module';
-import { ItemModule } from './modules/todos/todos.module';
+import { TaskModule } from './modules/task/task.module';
+import { ItemModule } from './modules/item/item.module';
 
 @Module({
   imports: [
