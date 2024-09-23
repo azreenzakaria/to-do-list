@@ -17,68 +17,55 @@ type SignInResponse {
   message: String!
 }
 
-type IProjectList {
+type ITaskList {
   id: String!
-  title: String!
+  name: String!
 }
 
-type GetProjectsResponse {
-  result: [IProjectList!]!
+type GetTaskResponse {
+  result: [ITaskList!]!
 }
 
-type CreateProjectResponse {
+type CrudTaskResponse {
   message: String!
 }
 
-type UpdateProjectResponse {
-  message: String!
-}
-
-type RemoveProjectResponse {
-  message: String!
-}
-
-type ITodoList {
+type IItemList {
   id: String!
-  title: String!
-  description: String
-  priority: String!
-  isDone: Boolean!
-  dueDate: String
-  remarks: String
+  name: String!
+  isCompleted: Boolean!
 }
 
-type GetTodosResponse {
-  result: [ITodoList!]!
+type GetItemResponse {
+  result: [IItemList!]!
 }
 
-type CrudTodoResponse {
+type CrudItemResponse {
   message: String!
 }
 
 type Query {
   getUser(getUserInput: GetUserInput!): GetUserResponse!
-  getProject: GetProjectsResponse!
-  getTodos(getTodoInput: GetTodoInput!): GetTodosResponse!
+  getTask: GetTaskResponse!
+  getItems(getItemInput: GetItemInput!): GetItemResponse!
 }
 
 input GetUserInput {
   email: String!
 }
 
-input GetTodoInput {
-  projectId: String!
+input GetItemInput {
+  taskId: String!
 }
 
 type Mutation {
   logIn(logInInput: LogInInput!): LogInResponse!
   signIn(signInInput: SignInInput!): SignInResponse!
-  createProject(createProjectInput: CreateProjectInput!): CreateProjectResponse!
-  updateProject(updateProjectInput: UpdateProjectInput!): UpdateProjectResponse!
-  removeProject(removeProjectInput: RemoveProjectInput!): RemoveProjectResponse!
-  createTodo(createTodoInput: CreateTodoInput!): CrudTodoResponse!
-  updateTodo(createTodoInput: CreateTodoInput!): CrudTodoResponse!
-  removeTodo(removeTodoInput: RemoveTodoInput!): CrudTodoResponse!
+  createTask(createTaskInput: CreateTaskInput!): CrudTaskResponse!
+  updateTask(updateTaskInput: UpdateTaskInput!): CrudTaskResponse!
+  removeTask(removeTaskInput: RemoveTaskInput!): CrudTaskResponse!
+  createItem(createItemInput: CreateItemInput!): CrudItemResponse!
+  removeItem(removeItemInput: RemoveItemInput!): CrudItemResponse!
 }
 
 input LogInInput {
@@ -91,30 +78,26 @@ input SignInInput {
   password: String!
 }
 
-input CreateProjectInput {
-  title: String!
+input CreateTaskInput {
+  name: String!
 }
 
-input UpdateProjectInput {
+input UpdateTaskInput {
   id: String!
-  title: String!
+  name: String!
 }
 
-input RemoveProjectInput {
+input RemoveTaskInput {
   id: String!
 }
 
-input CreateTodoInput {
+input CreateItemInput {
   id: String!
-  projectId: String!
-  title: String!
-  description: String!
-  priority: String!
-  isDone: Boolean!
-  dueDate: String!
-  remarks: String!
+  taskId: String!
+  name: String!
+  isCompleted: Boolean!
 }
 
-input RemoveTodoInput {
+input RemoveItemInput {
   id: String!
 }
