@@ -2,15 +2,15 @@ import { InputType, Field } from '@nestjs/graphql';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 @InputType()
-export class CreateProjectInput {
+export class CreateTaskInput {
   @IsString()
   @IsNotEmpty()
   @Field()
-  title: string;
+  name: string;
 }
 
 @InputType()
-export class UpdateProjectInput {
+export class UpdateTaskInput {
   @IsString()
   @IsNotEmpty()
   @Field()
@@ -19,11 +19,11 @@ export class UpdateProjectInput {
   @IsString()
   @IsNotEmpty()
   @Field()
-  title: string;
+  name: string;
 }
 
 @InputType()
-export class RemoveProjectInput {
+export class RemoveTaskInput {
   @IsString()
   @IsNotEmpty()
   @Field()

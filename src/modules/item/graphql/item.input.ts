@@ -2,55 +2,36 @@ import { InputType, Field } from '@nestjs/graphql';
 import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
 
 @InputType()
-export class GetTodoInput {
+export class GetItemInput {
   @IsString()
   @IsNotEmpty()
   @Field()
-  projectId: string;
+  taskId: string;
 }
 
 @InputType()
-export class CreateTodoInput {
+export class CreateItemInput {
   @IsString()
   @Field()
   id?: string;
 
   @IsString()
   @Field()
-  projectId?: string;
+  taskId?: string;
 
   @IsString()
   @IsNotEmpty()
   @Field()
-  title: string;
-
-  @IsString()
-  @Field()
-  description?: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @Field()
-  priority: string;
+  name: string;
 
   @IsBoolean()
   @IsNotEmpty()
   @Field()
-  isDone: boolean;
-
-  @IsString()
-  @IsNotEmpty()
-  @Field()
-  dueDate?: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @Field()
-  remarks?: string;
+  isCompleted: boolean;
 }
 
 @InputType()
-export class RemoveTodoInput {
+export class RemoveItemInput {
   @IsString()
   @IsNotEmpty()
   @Field()
