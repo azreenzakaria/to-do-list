@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TaskEntity } from 'src/infrastructure/entity/task.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { ITaskList } from './dto/task.dto';
 import { GetTaskResponse } from './graphql/task.response';
 import {
@@ -10,12 +10,15 @@ import {
   RemoveTaskInput,
 } from './graphql/task.input';
 import { SYSTEM } from 'src/constants';
+import { ItemEntity } from 'src/infrastructure/entity/item.entity';
 
 @Injectable()
 export class TaskService {
   constructor(
     @InjectRepository(TaskEntity)
     private readonly taskRepo: Repository<TaskEntity>,
+    @InjectRepository(ItemEntity)
+    private readonly itemRepo: Repository<ItemEntity>,
   ) {}
 
   async getTask(): Promise<GetTaskResponse> {
@@ -24,11 +27,25 @@ export class TaskService {
         order: { updatedDateTime: 'DESC' },
       });
       if (getNames.length === 0) throw new Error('No task found');
+
       const todoList: ITaskList[] = getNames.map(({ id, name }) => ({
         id,
         name,
       }));
-      return { result: todoList };
+
+      const idTaskArr = await Promise.all(
+        todoList.map(async (item) => {
+          const getItems = await this.itemRepo.find({
+            where: { task: In([item.id]) },
+          });
+          const completedItem = getItems.filter(
+            (each) => each.isCompleted === true,
+          ).length;
+          return { ...item, completedItem, totalItem: getItems.length };
+        }),
+      );
+
+      return { result: idTaskArr };
     } catch (error) {
       console.log(error);
       throw new Error(error);
@@ -41,7 +58,7 @@ export class TaskService {
       newProject.name = createTaskInput.name;
       newProject.createdBy = SYSTEM;
       await this.taskRepo.save(newProject);
-      return { message: 'A project have been created successfully.' };
+      return { message: 'A task have been created successfully.' };
     } catch (error) {
       console.log(error);
       throw new Error(error);
@@ -57,7 +74,7 @@ export class TaskService {
       });
 
       if (!currentData)
-        throw new Error('Data is not available. Please contact support');
+        throw new Error('No data available. Please contact support!');
       // Updating the record
       currentData.name = name;
       await this.taskRepo.save(currentData);
@@ -74,12 +91,12 @@ export class TaskService {
         id: removeTaskInput.id,
       });
       if (!currentData)
-        throw new Error('Data is not available. Please contact support');
+        throw new Error('No data available. Please contact support!');
       // Updating the record
       currentData.deletedBy = SYSTEM;
       currentData.deletedDateTime = new Date().toISOString();
       await this.taskRepo.save(currentData);
-      return { message: 'A project have been removed successfully.' };
+      return { message: 'A task have been removed successfully.' };
     } catch (error) {
       console.log(error);
       throw new Error(error);

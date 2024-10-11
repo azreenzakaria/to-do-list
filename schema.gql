@@ -20,6 +20,8 @@ type SignInResponse {
 type ITaskList {
   id: String!
   name: String!
+  completedItem: Float!
+  totalItem: Float!
 }
 
 type GetTaskResponse {

@@ -7,4 +7,10 @@ export class ITaskList {
 
   @Field()
   name: string;
+
+  @Field()
+  completedItem?: number;
+
+  @Field()
+  totalItem?: number;
 }
