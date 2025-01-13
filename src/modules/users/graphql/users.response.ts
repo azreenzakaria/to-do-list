@@ -7,7 +7,7 @@ export class GetUserResponse {
 }
 
 @ObjectType()
-export class LogInResponse {
+export class SignUpResponse {
   @Field()
   id: string;
 

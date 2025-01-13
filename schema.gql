@@ -6,7 +6,7 @@ type GetUserResponse {
   message: String!
 }
 
-type LogInResponse {
+type SignUpResponse {
   id: String!
   email: String!
   accessToken: String!
@@ -61,7 +61,7 @@ input GetItemInput {
 }
 
 type Mutation {
-  logIn(logInInput: LogInInput!): LogInResponse!
+  signUp(signUpInput: SignUpInput!): SignUpResponse!
   signIn(signInInput: SignInInput!): SignInResponse!
   createTask(createTaskInput: CreateTaskInput!): CrudTaskResponse!
   updateTask(updateTaskInput: UpdateTaskInput!): CrudTaskResponse!
@@ -70,7 +70,7 @@ type Mutation {
   removeItem(removeItemInput: RemoveItemInput!): CrudItemResponse!
 }
 
-input LogInInput {
+input SignUpInput {
   email: String!
   password: String!
 }

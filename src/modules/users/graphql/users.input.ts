@@ -11,7 +11,7 @@ export class GetUserInput {
 }
 
 @InputType()
-export class LogInInput {
+export class SignUpInput {
   @IsString()
   @IsEmail()
   @IsNotEmpty()

@@ -1,34 +1,39 @@
 import { Injectable } from '@nestjs/common';
-import { LogInInput, SignInInput } from './graphql/users.input';
-import { LogInResponse, SignInResponse } from './graphql/users.response';
+import { SignUpInput, SignInInput } from './graphql/users.input';
+import { SignUpResponse, SignInResponse } from './graphql/users.response';
 import { decrypt, validatePassword } from 'src/utilities/utility';
 import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserEntity } from 'src/infrastructure/entity/users.entity';
+import { Repository } from 'typeorm';
+import { API_RESPONSE_MESSAGE } from 'src/constants';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    @InjectRepository(UserEntity)
+    private readonly userRepo: Repository<UserEntity>,
+  ) {}
 
-  async auth(logInInput: LogInInput): Promise<LogInResponse> {
+  async signUp(input: SignUpInput): Promise<SignUpResponse> {
     try {
-      const { email, password } = logInInput;
+      const { email, password } = input;
 
-      // const email2 = await this.repository.findAll();
-      // console.log('------------------------------', email2);
+      // const password1 = 'U2FsdGVkX1+rdP+VrnpuNhwjn68QaAw6cgXE2IuVWyY=';
+      // const secret_key = 'b7d1f43e8a2f6b0378972e1c3f9087b8';
 
-      const password1 = 'U2FsdGVkX1+rdP+VrnpuNhwjn68QaAw6cgXE2IuVWyY=';
-      const secret_key = 'b7d1f43e8a2f6b0378972e1c3f9087b8';
+      // const decryptedPassword: string = decrypt(password1, secret_key);
 
-      const decryptedPassword: string = decrypt(password1, secret_key);
+      // console.log('password', password);
+      // console.log('secret_key', this.configService.getOrThrow('SECRET_KEY'));
+      // console.log('decryptedPassword', decryptedPassword);
 
-      console.log('password', password);
-      console.log('secret_key', this.configService.getOrThrow('SECRET_KEY'));
-      console.log('decryptedPassword', decryptedPassword);
-
-      const checkPassword = validatePassword(decryptedPassword);
-      if (!checkPassword)
-        throw new Error(
-          'The password must be at least 8 characters long and a combination of uppercase letters, lowercase letters, numbers, and symbols',
-        );
+      // const checkPassword = validatePassword(decryptedPassword);
+      // if (!checkPassword)
+      //   throw new Error(
+      //     'The password must be at least 8 characters long and a combination of uppercase letters, lowercase letters, numbers, and symbols',
+      //   );
 
       // Then, compare the password with input and the DB.
 
@@ -48,18 +53,20 @@ export class UserService {
     try {
       const { email, password } = signInInput;
 
-      // validate email, check in db if exist or not, if exist throw an error
+      // validate email, check in db if exist or not
+      const registeredEmail = await this.userRepo.findOneBy({
+        email: email,
+      });
+      if (!registeredEmail)
+        throw new Error(API_RESPONSE_MESSAGE.userNotRegistered);
 
-      // Front-End need to match the passwords then will send to us only one
-      const checkPassword = validatePassword(password);
-      if (!checkPassword)
-        throw new Error(
-          'The password must be at least 8 characters long and a combination of uppercase letters, lowercase letters, numbers, and symbols',
-        );
+      // compare password with the db
+      // decrypt the password from the input and db. Then compare it.
+      // const passwordMatch = null;
+      // if (!passwordMatch)
+      //   throw new Error(API_RESPONSE_MESSAGE.passwordNotMatch);
 
-      // Add the user to DB
-
-      return { message: 'You have successfully registered!' };
+      return { message: 'You have successfully sign in!' };
     } catch (error) {
       console.log(error);
       throw new Error(error);

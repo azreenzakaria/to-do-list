@@ -1,10 +1,10 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserEntity } from 'src/infrastructure/entity/users.entity';
 import { IUserResolver } from './interface/users.interface';
-import { GetUserInput, LogInInput, SignInInput } from './graphql/users.input';
+import { GetUserInput, SignUpInput, SignInInput } from './graphql/users.input';
 import {
   GetUserResponse,
-  LogInResponse,
+  SignUpResponse,
   SignInResponse,
 } from './graphql/users.response';
 import { UserService } from './users.service';
@@ -20,11 +20,11 @@ export class UserResolver implements IUserResolver {
     return { message: 'Success' };
   }
 
-  @Mutation(() => LogInResponse)
-  async logIn(
-    @Args('logInInput') logInInput: LogInInput,
-  ): Promise<LogInResponse> {
-    return await this.userService.auth(logInInput);
+  @Mutation(() => SignUpResponse)
+  async signUp(
+    @Args('signUpInput') SignUpInput: SignUpInput,
+  ): Promise<SignUpResponse> {
+    return await this.userService.signUp(SignUpInput);
   }
 
   @Mutation(() => SignInResponse)
