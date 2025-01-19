@@ -17,8 +17,17 @@ export const validatePassword = (password: string) => {
  * @param {string} key encryptionKey
  * @return {*}  {string}
  */
-export const decrypt = (value: string, key: string): string => {
-  const decrypted = crypto.AES.decrypt(value, key);
-  const decryptedValue = decrypted.toString(crypto.enc.Utf8);
-  return decryptedValue;
+export const decrypt = (value: string, key: string, iv: string): string => {
+  // Parse key and IV to the correct format
+  const parsedKey = crypto.enc.Utf8.parse(key);
+  const parsedIv = crypto.enc.Utf8.parse(iv);
+
+  const decryptedBytes = crypto.AES.decrypt(value, parsedKey, {
+    iv: parsedIv,
+    mode: crypto.mode.CBC,
+    padding: crypto.pad.Pkcs7,
+  });
+
+  // Convert decrypted bytes to string
+  return decryptedBytes.toString(crypto.enc.Utf8);
 };
