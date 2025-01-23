@@ -2,15 +2,6 @@ import { InputType, Field } from '@nestjs/graphql';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 @InputType()
-export class GetUserInput {
-  @IsString()
-  @IsEmail()
-  @IsNotEmpty()
-  @Field()
-  email: string;
-}
-
-@InputType()
 export class SignUpInput {
   @IsString()
   @IsEmail()

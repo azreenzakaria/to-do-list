@@ -2,10 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type GetUserResponse {
-  message: String!
-}
-
 type SignUpResponse {
   id: String!
   email: String!
@@ -47,13 +43,8 @@ type CrudItemResponse {
 }
 
 type Query {
-  getUser(getUserInput: GetUserInput!): GetUserResponse!
   getTask: GetTaskResponse!
   getItems(getItemInput: GetItemInput!): GetItemResponse!
-}
-
-input GetUserInput {
-  email: String!
 }
 
 input GetItemInput {

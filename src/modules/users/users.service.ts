@@ -20,23 +20,24 @@ export class UserService {
     try {
       const { email, password } = input;
 
-      const registeredEmail = await this.userRepo.findOneBy({
+      const registeredEmail: UserEntity = await this.userRepo.findOneBy({
         email: email,
       });
 
       if (registeredEmail)
         throw new Error(API_RESPONSE_MESSAGE.userAlreadyRegistered);
 
-      const decryptedPassword = decrypt(
+      const decryptedPassword: string = decrypt(
         password,
         this.configService.getOrThrow('SECRET_KEY'),
         this.configService.getOrThrow('SECRET_IV'),
       );
-      const checkPassword = validatePassword(decryptedPassword);
+
+      const checkPassword: boolean = validatePassword(decryptedPassword);
       if (!checkPassword)
         throw new Error(API_RESPONSE_MESSAGE.passwordNotValid);
 
-      const newUser = new UserEntity();
+      const newUser: UserEntity = new UserEntity();
       newUser.email = email;
       newUser.password = newUser.password = password;
       newUser.createdBy = SYSTEM;
@@ -58,13 +59,13 @@ export class UserService {
     try {
       const { email, password } = signInInput;
 
-      const registeredEmail = await this.userRepo.findOneBy({
+      const registeredEmail: UserEntity = await this.userRepo.findOneBy({
         email: email,
       });
       if (!registeredEmail)
         throw new Error(API_RESPONSE_MESSAGE.userNotRegistered);
 
-      const decryptedPassword = decrypt(
+      const decryptedPassword: string = decrypt(
         password,
         this.configService.getOrThrow('SECRET_KEY'),
         this.configService.getOrThrow('SECRET_IV'),
