@@ -79,7 +79,7 @@ export class UserService {
           this.configService.getOrThrow('SECRET_IV'),
         )
       )
-        throw new Error(API_RESPONSE_MESSAGE.passwordNotMatch);
+        throw new Error(API_RESPONSE_MESSAGE.incorrectPassword);
 
       return { message: 'You have successfully sign in!' };
     } catch (error) {
