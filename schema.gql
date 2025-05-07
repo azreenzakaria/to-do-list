@@ -58,6 +58,7 @@ type Mutation {
   updateTask(updateTaskInput: UpdateTaskInput!): CrudTaskResponse!
   removeTask(removeTaskInput: RemoveTaskInput!): CrudTaskResponse!
   createItem(createItemInput: CreateItemInput!): CrudItemResponse!
+  updateItem(updateItemInput: UpdateItemInput!): CrudItemResponse!
   removeItem(removeItemInput: RemoveItemInput!): CrudItemResponse!
 }
 
@@ -85,8 +86,12 @@ input RemoveTaskInput {
 }
 
 input CreateItemInput {
-  id: String!
   taskId: String!
+  name: String!
+}
+
+input UpdateItemInput {
+  id: String!
   name: String!
   isCompleted: Boolean!
 }
