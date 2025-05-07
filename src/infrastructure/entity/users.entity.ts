@@ -7,12 +7,15 @@ import { IUser } from './interface/user.interface';
 @ObjectType()
 export class UserEntity extends BaseEntity implements IUser {
   @Field(() => String)
-  @Column({ type: 'varchar', length: 128 })
+  @Column({ type: 'varchar', length: 128, nullable: true })
   username: string;
 
   @Field(() => String)
   @Column({ type: 'varchar', length: 128 })
   email: string;
+
+  @Column({ type: 'varchar', length: 128 })
+  password: string;
 
   @Field(() => String, { nullable: true })
   @Column({ name: 'refresh_token', type: 'text', nullable: true })

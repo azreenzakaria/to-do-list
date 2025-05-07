@@ -1,7 +1,7 @@
-import { LogInInput, SignInInput } from '../graphql/users.input';
-import { LogInResponse, SignInResponse } from '../graphql/users.response';
+import { SignUpInput, SignInInput } from '../graphql/users.input';
+import { SignUpResponse, SignInResponse } from '../graphql/users.response';
 
 export interface IUserResolver {
-  logIn(logInInput: LogInInput): Promise<LogInResponse>;
+  signUp(SignUpInput: SignUpInput): Promise<SignUpResponse>;
   signIn(signInInput: SignInInput): Promise<SignInResponse>;
 }

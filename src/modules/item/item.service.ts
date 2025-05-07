@@ -8,6 +8,7 @@ import {
   CreateItemInput,
   GetItemInput,
   RemoveItemInput,
+  UpdateItemInput,
 } from './graphql/item.input';
 import { TaskEntity } from 'src/infrastructure/entity/task.entity';
 import { SYSTEM } from 'src/constants';
@@ -53,7 +54,7 @@ export class ItemService {
 
   async createItem(input: CreateItemInput): Promise<CrudItemResponse> {
     try {
-      const { name, isCompleted, taskId } = input;
+      const { name, taskId } = input;
 
       // Validation the id of the project
       const taskData = await this.taskRepo.findOneBy({ id: taskId });
@@ -64,11 +65,31 @@ export class ItemService {
       const newItem = new ItemEntity();
       newItem.createdBy = SYSTEM;
       newItem.name = name;
-      newItem.isCompleted = isCompleted;
+      newItem.isCompleted = false;
       newItem.task = taskData;
       await this.itemRepo.save(newItem);
 
       return { message: 'An item have been created successfully.' };
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+
+  async updateItem(input: UpdateItemInput): Promise<CrudItemResponse> {
+    try {
+      const { id, name, isCompleted } = input;
+
+      // Validation
+      const itemData = await this.itemRepo.findOneBy({ id: id });
+      if (!itemData)
+        throw new Error('No data available. Please contact support!');
+
+      itemData.name = name;
+      itemData.isCompleted = isCompleted;
+      await this.itemRepo.save(itemData);
+
+      return { message: 'An item have been updated successfully.' };
     } catch (error) {
       console.log(error);
       throw new Error(error);

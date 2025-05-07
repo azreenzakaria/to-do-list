@@ -6,6 +6,7 @@ import {
   CreateItemInput,
   GetItemInput,
   RemoveItemInput,
+  UpdateItemInput,
 } from './graphql/item.input';
 
 @Resolver(() => ItemEntity)
@@ -24,6 +25,13 @@ export class ItemResolver {
     @Args('createItemInput') input: CreateItemInput,
   ): Promise<CrudItemResponse> {
     return await this.itemService.createItem(input);
+  }
+
+  @Mutation(() => CrudItemResponse)
+  async updateItem(
+    @Args('updateItemInput') input: UpdateItemInput,
+  ): Promise<CrudItemResponse> {
+    return await this.itemService.updateItem(input);
   }
 
   @Mutation(() => CrudItemResponse)

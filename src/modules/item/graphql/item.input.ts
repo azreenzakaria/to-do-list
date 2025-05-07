@@ -13,11 +13,19 @@ export class GetItemInput {
 export class CreateItemInput {
   @IsString()
   @Field()
-  id?: string;
+  taskId?: string;
 
   @IsString()
+  @IsNotEmpty()
   @Field()
-  taskId?: string;
+  name: string;
+}
+
+@InputType()
+export class UpdateItemInput {
+  @IsString()
+  @Field()
+  id?: string;
 
   @IsString()
   @IsNotEmpty()

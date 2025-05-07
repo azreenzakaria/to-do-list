@@ -2,11 +2,7 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type GetUserResponse {
-  message: String!
-}
-
-type LogInResponse {
+type SignUpResponse {
   id: String!
   email: String!
   accessToken: String!
@@ -47,13 +43,8 @@ type CrudItemResponse {
 }
 
 type Query {
-  getUser(getUserInput: GetUserInput!): GetUserResponse!
   getTask: GetTaskResponse!
   getItems(getItemInput: GetItemInput!): GetItemResponse!
-}
-
-input GetUserInput {
-  email: String!
 }
 
 input GetItemInput {
@@ -61,16 +52,17 @@ input GetItemInput {
 }
 
 type Mutation {
-  logIn(logInInput: LogInInput!): LogInResponse!
+  signUp(signUpInput: SignUpInput!): SignUpResponse!
   signIn(signInInput: SignInInput!): SignInResponse!
   createTask(createTaskInput: CreateTaskInput!): CrudTaskResponse!
   updateTask(updateTaskInput: UpdateTaskInput!): CrudTaskResponse!
   removeTask(removeTaskInput: RemoveTaskInput!): CrudTaskResponse!
   createItem(createItemInput: CreateItemInput!): CrudItemResponse!
+  updateItem(updateItemInput: UpdateItemInput!): CrudItemResponse!
   removeItem(removeItemInput: RemoveItemInput!): CrudItemResponse!
 }
 
-input LogInInput {
+input SignUpInput {
   email: String!
   password: String!
 }
@@ -94,8 +86,12 @@ input RemoveTaskInput {
 }
 
 input CreateItemInput {
-  id: String!
   taskId: String!
+  name: String!
+}
+
+input UpdateItemInput {
+  id: String!
   name: String!
   isCompleted: Boolean!
 }

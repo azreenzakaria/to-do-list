@@ -1,39 +1,50 @@
 import { Injectable } from '@nestjs/common';
-import { LogInInput, SignInInput } from './graphql/users.input';
-import { LogInResponse, SignInResponse } from './graphql/users.response';
+import { SignUpInput, SignInInput } from './graphql/users.input';
+import { SignUpResponse, SignInResponse } from './graphql/users.response';
 import { decrypt, validatePassword } from 'src/utilities/utility';
 import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserEntity } from 'src/infrastructure/entity/users.entity';
+import { Repository } from 'typeorm';
+import { API_RESPONSE_MESSAGE, SYSTEM } from 'src/constants';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    @InjectRepository(UserEntity)
+    private readonly userRepo: Repository<UserEntity>,
+  ) {}
 
-  async auth(logInInput: LogInInput): Promise<LogInResponse> {
+  async signUp(input: SignUpInput): Promise<SignUpResponse> {
     try {
-      const { email, password } = logInInput;
+      const { email, password } = input;
 
-      // const email2 = await this.repository.findAll();
-      // console.log('------------------------------', email2);
+      const registeredEmail: UserEntity = await this.userRepo.findOneBy({
+        email: email,
+      });
 
-      const password1 = 'U2FsdGVkX1+rdP+VrnpuNhwjn68QaAw6cgXE2IuVWyY=';
-      const secret_key = 'b7d1f43e8a2f6b0378972e1c3f9087b8';
+      if (registeredEmail)
+        throw new Error(API_RESPONSE_MESSAGE.userAlreadyRegistered);
 
-      const decryptedPassword: string = decrypt(password1, secret_key);
+      const decryptedPassword: string = decrypt(
+        password,
+        this.configService.getOrThrow('SECRET_KEY'),
+        this.configService.getOrThrow('SECRET_IV'),
+      );
 
-      console.log('password', password);
-      console.log('secret_key', this.configService.getOrThrow('SECRET_KEY'));
-      console.log('decryptedPassword', decryptedPassword);
-
-      const checkPassword = validatePassword(decryptedPassword);
+      const checkPassword: boolean = validatePassword(decryptedPassword);
       if (!checkPassword)
-        throw new Error(
-          'The password must be at least 8 characters long and a combination of uppercase letters, lowercase letters, numbers, and symbols',
-        );
+        throw new Error(API_RESPONSE_MESSAGE.passwordNotValid);
 
-      // Then, compare the password with input and the DB.
+      const newUser: UserEntity = new UserEntity();
+      newUser.email = email;
+      newUser.password = newUser.password = password;
+      newUser.createdBy = SYSTEM;
+      await this.userRepo.save(newUser);
 
       return {
-        id: '1',
+        id: newUser.id,
         email,
         accessToken: '1',
         refreshToken: '2',
@@ -48,18 +59,29 @@ export class UserService {
     try {
       const { email, password } = signInInput;
 
-      // validate email, check in db if exist or not, if exist throw an error
+      const registeredEmail: UserEntity = await this.userRepo.findOneBy({
+        email: email,
+      });
+      if (!registeredEmail)
+        throw new Error(API_RESPONSE_MESSAGE.userNotRegistered);
 
-      // Front-End need to match the passwords then will send to us only one
-      const checkPassword = validatePassword(password);
-      if (!checkPassword)
-        throw new Error(
-          'The password must be at least 8 characters long and a combination of uppercase letters, lowercase letters, numbers, and symbols',
-        );
+      const decryptedPassword: string = decrypt(
+        password,
+        this.configService.getOrThrow('SECRET_KEY'),
+        this.configService.getOrThrow('SECRET_IV'),
+      );
 
-      // Add the user to DB
+      if (
+        decryptedPassword !==
+        decrypt(
+          registeredEmail.password,
+          this.configService.getOrThrow('SECRET_KEY'),
+          this.configService.getOrThrow('SECRET_IV'),
+        )
+      )
+        throw new Error(API_RESPONSE_MESSAGE.incorrectPassword);
 
-      return { message: 'You have successfully registered!' };
+      return { message: 'You have successfully sign in!' };
     } catch (error) {
       console.log(error);
       throw new Error(error);
